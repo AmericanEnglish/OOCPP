@@ -1,3 +1,4 @@
+
 # Introduction to C++ Object Oriented Programming
 This small repo serves as a quick crash course through C++ object oriented 
 programming. 
@@ -6,6 +7,12 @@ the skill sets to design some basic objects in C++ and their respective
 header files. 
 On top of that I will cover some basic design for Qt 5.8 and subclassing 
 the windows.
+
+## Table of Contents
+    1. [Introduction to Objects](#intro)
+    2. [Bigger Example of OOP](#example2)
+    3. [Super and Sub Classes](#classing)
+    4. [Virtual and Override Methods](#virto)
 
 ## Forward on Starting Object Oriented Programming (OOP)
 Object Oriented programming revoles around several concepts that
@@ -20,7 +27,7 @@ be super relevant to the development of Qt windows.
 So I won't put anything about Descontructors for example.
 Maybe in the future but not for now.
 
-## Header Files and Implementation Files
+## <a name="intro"></a> Header Files and Implementation Files
 
 ### Header Files
 
@@ -99,7 +106,7 @@ int main() {
 }
 ```
 
-### Expanded Examples - Example2
+## <a name="example2"></a>Bigger by Examples - Example2
 So example1 might not seem super useful. 
 Clearly it is more effective to just use a function for simple numerical
 incrementation.
@@ -219,7 +226,7 @@ from int to double in each square root call.
 With the object this process is abstracted away to just spawning the objects
 with their respective numbers and messages.
 
-## Subclasses and Super Classes - example3
+## <a name="classing"></a> Subclasses and Super Classes - example3
 The next idea is the idea of subclassing.
 The easiest real life example of subclassing that comes to mind is the subclassing of numbers.
 Imagine that following.
@@ -413,7 +420,7 @@ Hopefully this gives you an idea of how subclassing.
 The next two pieces that need to happen are also important. 
 Onto Virtual Methods!
 
-### Override and Virtual Methods
+### <a name="virto"></a>Override and Virtual Methods
 Before I begin I want start up front with the definition of these objects and then 
 extrapolation.
 1. SuperClass
