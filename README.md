@@ -411,10 +411,169 @@ a0
 
 Hopefully this gives you an idea of how subclassing. 
 The next two pieces that need to happen are also important. 
-Onto Override Methods!
+Onto Virtual Methods!
 
-### Override Methods
+### Override and Virtual Methods
+Before I begin I want start up front with the definition of these functions and then 
+extrapolation.
+1. SuperClass
+```c++
+// superclass.h
+#pragma once
+class SuperClass {
+    public:
+        // Constructor
+        SuperClass(int aNum1 = 0, int aNum2 = 0);
+        
+        // Methods
+        int sum(int aNum);
+    protected:
+        internalSum();
+        int num1, num2;
+};
+// superclass.cpp
+#include "superclass.h"
 
-### Virtual Methods
+SuperClass::SuperClass(int aNum1, int aNum2) {
+    num1 = aNum1;
+    num2 = aNum2;
+}
 
-### Qt Widget Example
+// Public
+int SuperClass::sum(int aNum) {
+    return internalSum() + aNum;
+}
+
+// Protected
+int SuperClass::internalSum() {
+    return num1 + num2;
+}
+```
+
+2. SubClass
+```c++
+// subclass.h
+#pragma once
+#include "superclass.h"
+
+class SubClass : public SuperClass {
+    public:
+        // Constructor
+        SubClass(int aNum1 = 0, int aNum2 = 0, int aNum3 = 0);
+
+    protected:
+        int internalSum();
+        int num3;
+};
+// subclass.cpp
+#include "subclass.h"
+
+SubClass::SubClass(int aNum1, int aNum2, int aNum3) : SuperClass(aNum1, aNum2) {
+    num3 = aNum3;
+}
+
+int SubClass::internalSum() {
+    return num1 + num2 + num3;
+}
+```
+
+Now first let's demo these with demoSub.cpp with the following:
+```c++
+#include "subclass.h"
+#include "superclass.h"
+#include <iostream>
+
+int main() {
+    // Demo The Superclass
+    SuperClass obj1 = SuperClass(1, 1);
+    std::cout << "1 + 1 + 3 = " << obj1.sum(3) << std::endl;
+
+    // Demo the Subclass
+    SubClass obj2 = SubClass(1, 1, 1);
+    std::cout << "1 + 1 + 1 + 3 = " << obj2.sum(3) << std::endl;
+    return 0;
+}
+```
+
+Compile and run!
+```
+> cl demonSub.cpp subclass.cpp superclass.cpp
+> demoSub.exe
+1 + 1 + 3 = 5
+1 + 1 + 1 + 3 = 5
+```
+Definitely not right. Let's take a look at our code to make sure we did it right:
+```c++
+// superclass.cpp
+int SuperClass::internalSum() {
+    return num1 + num2;
+}
+// subclass.cpp
+int SubClass::internalSum() {
+    return num1 + num2 + num3;
+}
+```
+
+Both of these classes define `internalSum` but for some reason it is still only 
+summing num1 and num2 as if SubClass was calling the method from SuperClass.
+In part it "is" calling it. This is a long conversation beyond this crash course.
+[Check out binding here](http://stackoverflow.com/questions/36691108/what-is-the-difference-between-early-binding-and-late-binding-in-c).
+Basically we need to make `SuperClass::internalSum()` virtual so that 
+`SubClass::internalSum()` gets called instead. 
+Now:
+```c++
+#pragma once
+class SuperClass {
+    public:
+        // Constructor
+        SuperClass(int aNum1 = 0, int aNum2 = 0);
+        
+        // Methods
+        int sum(int aNum);
+    protected:
+        // Old
+        //int internalSum();
+        // New
+        virtual int internalSum();
+        int num1, num2;
+};
+```
+
+By adding `virtual` we have made `SuperClass::interalSum()` can be replaced/rewritten
+by `SubClass::internal()` and the calls all checkout.
+```c++
+> demoSub.exe
+1 + 1 + 3 = 5
+1 + 1 + 1 + 3 = 6
+```
+
+* What about `override`?
+
+`override` is a small extension of virtual, as is read [here](http://en.cppreference.com/w/cpp/language/override).
+If we wanted to make a SubSubClass of our SubClass we'll have to overwrite 
+`SubClass::interalSum()` as well but remember that `SubClass::internalSum()` isn't 
+virtual like `SuperClass::internalSum()` is. 
+In order to both replace and allow it to be replaced we'll make `SubClass::internalSum()`
+virtual by using `override` like just below.
+```c++
+#pragma once
+#include "superclass.h"
+
+class SubClass : public SuperClass {
+    public:
+        // Constructor
+        SubClass(int aNum1 = 0, int aNum2 = 0, int aNum3 = 0);
+
+    protected:
+        // New
+        int internalSum() override;
+        // Old
+        //int internalSum();
+        int num3;
+};
+```
+This would allow a SubSubClass to replace the `interalSum()` method of SubClass.
+
+## Qt Widget Example
+### Qt Subclassing
+### Qt Virtual Methods
