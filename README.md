@@ -73,13 +73,13 @@ int main() {
 }
 ```
 
-### Expanded Examples
+### Expanded Examples - Example2
 So example1 might not seem super useful. 
 Clearly it is more effective to just use a function for simple numerical
 incrementation.
 However what if you wanted to store more than just one value?
 Say you wanted to store a message and an integer to go with it.
-In a regular c++ file you'd see something like
+In a regular c++ file you'd see something like.
 ```c++
 // myRootFunction.cpp
 #include <iostream>
