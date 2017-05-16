@@ -539,8 +539,8 @@ class SuperClass {
 };
 ```
 
-By adding `virtual` we have made `SuperClass::interalSum()` can be replaced/rewritten
-by `SubClass::internal()` and the calls all checkout.
+By adding `virtual` we have made `SuperClass::interalSum()` so that it can be replaced/re
+written by `SubClass::internal()` and the calls all checkout.
 ```c++
 > demoSub.exe
 1 + 1 + 3 = 5
