@@ -7,6 +7,9 @@ the skill sets to design some basic objects in C++ and their respective
 header files. 
 On top of that I will cover some basic design for Qt 5.8 and subclassing 
 the windows.
+I make the brazen assumption that by reading this you have a basic understanding of programming and some
+C++11 knowledge. Not a lot of C++11 knowledge but just the bare minimums of compiling, assigning variables, 
+making functions, or a willingness to learn as you go if you don't.
 
 ## Table of Contents
 
