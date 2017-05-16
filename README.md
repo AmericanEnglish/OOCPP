@@ -36,6 +36,26 @@ this constructor is how the object will build itself given some data.
 An object can and often will have multiple constructors.
 Below is an example of a basic object compared to a function.
 Both the object and the function have the same purpose. 
+Take note that the object has access to its own methods and internal 
+variables without the need of a "." or "->" operator.
+In Python you might seen something like:
+```python
+class obj1:
+    def __init__(self, var1):
+        self.var = var1
+        #   ^ This thing here
+    def method1(self):
+        pass
+    def method2(self, var2):
+        if var2 == self.var:
+        #              ^ Again
+            return self.var
+        else:
+            return self.method1()
+            #          ^ Here it is
+```
+C++ doesn't require the dot operator to access internals of the object
+itself.
 The code can be found in the example1 file set.
 ```c++
 // Header File (.h / .hpp)
@@ -85,7 +105,7 @@ Clearly it is more effective to just use a function for simple numerical
 incrementation.
 However what if you wanted to store more than just one value?
 Say you wanted to store a message and an integer to go with it.
-In a regular c++ file you'd see something like.
+In a regular c++ file you'd see something like:
 ```c++
 // myRootFunction.cpp
 #include <iostream>
@@ -199,6 +219,202 @@ from int to double in each square root call.
 With the object this process is abstracted away to just spawning the objects
 with their respective numbers and messages.
 
-### Subclasses and Super Classes - example3
+## Subclasses and Super Classes - example3
+The next idea is the idea of subclassing.
+The easiest real life example of subclassing that comes to mind is the subclassing of numbers.
+Imagine that following.
+* class Number (A Super class)
+    * Generic. All numbers can be a number. Range from -inf -> +inf
+* class Rational : public Number (A Sub class of Number, Superclass of Integer)
+    * Contains numbers which can be represented as a quotient of whole numbers
+* class Integer : public Rational (Subclass of Rationals, Superclass of Naturals)
+    * Can only be whole numbers from -inf -> +inf
+* class Natural : public Integer (Sub class of Integer)
+    * Can only be integers greater than 0
+
+My code examples do not implement this idea BUT if does help explain the concept of subclasses and 
+superclasses.
+Number is a generic terms which can be ANY number.
+However Rational is a specialization of Number which means that the number in question could
+be represented as a quotient of integers. 
+This specialization is what makes subclassing important. 
+
+For the demonstration allow for the following to happen:
+1. There exists a superclass called SuperClass
+2. There is a subclass which specializes SuperClass
+
+For brevity I will only include the header file code in this example.
+```c++
+#include <iostream>
+#include <string>
+
+class SuperClass {
+    public:
+        // Constructor
+        SuperClass(int aNum, int aNum2, std::string aC);
+        SuperClass(int aNum = 0, std::string aC = "a");
+
+        // Public Method
+        void print();
+        void setNum(int aNum);
+        int sum(int aNum);
+    private:
+        int superSum(int aNum);
+        // Private Variables
+        int num;
+        std::string c;
+};
+```
+If you want to see the SuperClass in action yourself you can compile demoSuper.cpp with
+```
+> cl demoSuper.cpp superclass.cpp
+> demonSuper.exe
+a0
+A1
+Sums:
+2
+3
+```
+Now if we want to specialize/subclass the SuperClass we're going to create another class called SubClass.
+```c++
+// subclass.h
+#include <iostream>
+#include <string>
+#include "superclass.h"
+
+class SubClass : public SuperClass {
+    //            ^ inheritance type
+    public:
+        // Only Constructor
+        SubClass(int aNum = 0, std::string c = "a", std::string m = "Q");
+        
+        // Special subtract methods
+        int subtract(int aNum);
+        int subtract2(int aNum);
+
+    private:
+        std::string secondString;
+};
+// subclass.cpp
+#include "subclass.h"
+
+SubClass::SubClass(int aNum, std::string c, std::string m) : SuperClass(aNum, c) {
+//                                                         ^ Super class call
+    secondString = m;
+}
+
+int SubClass::subtract(int aNum) {
+    // num is private :(
+    //return num - aNum;
+    // If only there was a better way
+    return sum(0) - aNum;
+}
+
+```
+
+Take note that my call to the super class happens in the header file here:
+```c++
+class SubClass : public SuperClass {
+    //            ^ inheritance type
+```
+<!--Explain the inhereitance type here-->
+<!--Explain the inhereitance type here-->
+In the cpp file I also call the constructor for the super class:
+```c++
+SubClass::SubClass(int aNum, std::string c, std::string m) : SuperClass(aNum, c) {
+//                                                         ^ Super class call
+```
+Passing the variables to the superclass as needed allows for those variables to be setup how the
+super class saw fit.
+This even allows SubClass to use the same methods of SuperClass! 
+This can be seen in demoSub.cpp
+```c++
+#include <iostream>
+#include "subclass.h"
+
+int main(int argc, char **argv) {
+    // Build Subclass
+    SubClass obj1 = SubClass();
+    
+    // Now print it out?
+    obj1.print();
+
+    // Then Print the subtract method
+    std::cout << "1.) 0 - 5 = " << obj1.subtract(5) << std::endl;
+    std::cout << "2.) 0 - 5 = " << obj1.subtract2(5) << std::endl;
+
+    // Use the sum method?
+    std::cout << "0 + 5 = " << obj1.sum(5) << std::endl;
+    return 0;
+}
+```
+SubClass can use both its own special method `SubClass::subtract` and `SuperClass::sum`.
+The most important section here is that if you look at `SubClass::subtract` there is this poor call to 
+`sum(int aNum)`.
+This is because in the the variable `num` is considered private and only accessable by superclass methods.
+Notice how `SuperClass::sum(int aNum)` works perfectly fine but `SubClass::subtract(int aNum)` needs this 
+bad call to the prior method.
+In this it would behoove us to redefine another section of privleges called `protected`. 
+Protected variables and Methods are somewhere inbetween Private and Public lands.
+* Public
+    * Everyone can see and use them
+* Private
+    * Only I, the Object, may see any use them
+* Protected
+    * Only I, the Object, AND my related/friendly classes have access to them.
+    * [Heres a link to a more formal definition](https://msdn.microsoft.com/en-us/library/e761de5s.aspx)
+
+So for the subtract method to work as intended We'll change the header of `SuperClass` to the following:
+```c++
+#include <iostream>
+#include <string>
+
+class SuperClass {
+    public:
+        // Constructor
+        SuperClass(int aNum, int aNum2, std::string aC);
+        SuperClass(int aNum = 0, std::string aC = "a");
+
+        // Public Method
+        void print();
+        void setNum(int aNum);
+        int sum(int aNum);
+    /* New Piece */
+    protected:
+        int num2;
+    /*************/
+    private:
+        int superSum(int aNum);
+        // Private Variables
+        int num;
+        std::string c;
+};
+
+```
+This will allow us to implement a new method called `SubClass::subtract2(int aNum)` as shown below:
+```c++
+int SubClass::subtract2(int aNum) {
+    // num2 is protected :)
+    return num2 - aNum;
+}
+```
+
+So to compile the whole thing:
+```
+> cl /EHsc demoSub.cpp subclass.cpp superclass.cpp
+> demoSub.exe
+a0
+1.) 0 - 5 = -5
+2.) 0 - 5 = -5
+0 + 5 = 5
+```
+
+Hopefully this gives you an idea of how subclassing. 
+The next two pieces that need to happen are also important. 
+Onto Override Methods!
+
+### Override Methods
+
+### Virtual Methods
 
 ### Qt Widget Example
