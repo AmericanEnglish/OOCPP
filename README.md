@@ -13,6 +13,12 @@ incorporate fancy terms and various other lingo.
 The aim of this repo is to keep it simple.  
 I'll go back through and introduce some definition of these fancy terms 
 when it suits me.
+Please note that this repo isn't yet meant to be a fully exauhstive course
+on all things CPP OOP. 
+In fact many things that might be considered important to OOP might not 
+be super relevant to the development of Qt windows.
+So I won't put anything about Descontructors for example.
+Maybe in the future but not for now.
 
 ## Header Files and Implementation Files
 
@@ -193,3 +199,6 @@ from int to double in each square root call.
 With the object this process is abstracted away to just spawning the objects
 with their respective numbers and messages.
 
+### Subclasses and Super Classes - example3
+
+### Qt Widget Example
