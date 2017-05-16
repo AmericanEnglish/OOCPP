@@ -9,7 +9,7 @@ On top of that I will cover some basic design for Qt 5.8 and subclassing
 the windows.
 
 ## Table of Contents
-    1. [Introduction to Objects](#intro)
+    1. [Introduction to Objects](#header-files-and-implementation-files)
     2. [Bigger Example of OOP](#example2)
     3. [Super and Sub Classes](#classing)
     4. [Virtual and Override Methods](#virto)
