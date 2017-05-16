@@ -414,7 +414,7 @@ The next two pieces that need to happen are also important.
 Onto Virtual Methods!
 
 ### Override and Virtual Methods
-Before I begin I want start up front with the definition of these functions and then 
+Before I begin I want start up front with the definition of these objects and then 
 extrapolation.
 1. SuperClass
 ```c++
