@@ -31,7 +31,7 @@ An object can and often will have multiple constructors.
 Below is an example of a basic object compared to a function.
 Both the object and the function have the same purpose. 
 The code can be found in the example1 file set.
-```[c++]
+```c++
 // Header File (.h / .hpp)
 class adder {
     public:
@@ -80,7 +80,7 @@ incrementation.
 However what if you wanted to store more than just one value?
 Say you wanted to store a message and an integer to go with it.
 In a regular c++ file you'd see something like
-```[c++]
+```c++
 // myRootFunction.cpp
 #include <iostream>
 #include <string>
@@ -104,7 +104,7 @@ For one operation this might be fine.
 You keep the function approach and continue creating more functions
 to handle this number over and over again.
 However you COULD create and object to do the same.
-```[c++]
+```c++
 // Header
 #include <iostream>
 #include <string>
@@ -152,7 +152,7 @@ int myInteger::mySqrt() {
 Notice that this file lacks a main.
 I'd like to talk about the main just below. 
 Notice the contructor
-```[c++]
+```c++
 myInteger(int num = 0, std::string message = "");
 ```
 Having the equal sign allows the object to spawned, otherwise called 
@@ -160,7 +160,7 @@ instantiated, with defaults BUT allows you to pass values to the object
 if you so choose.
 
 So to demonstrate this we will spawn several objects in our main.
-```[c++]
+```c++
 int main(int argc, char **argv) {
     // No vars given
     myInteger obj1 = myInteger();
@@ -173,7 +173,7 @@ int main(int argc, char **argv) {
 ```
 
 Then we will go through and call all their methods.
-```[c++]
+```c++
     obj1.print();
     // Prints
     // 0
